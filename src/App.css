@@ -2,7 +2,7 @@
 .app {
   min-height: 100vh;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, 'Noto Color Emoji', sans-serif;
 }
 
 .app-header {
@@ -129,9 +129,9 @@
   box-shadow: 0 1px 0 rgba(0,0,0,0.18);
 }
 
-.drum-emoji {
-  font-size: 2.2rem;
-  line-height: 1;
+.drum-svg {
+  width: 2.4rem;
+  height: 2.4rem;
 }
 
 .drum-label {
