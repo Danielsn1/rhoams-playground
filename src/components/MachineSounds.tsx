@@ -2,7 +2,7 @@
  * MachineSounds.tsx
  *
  * Heavy-machinery sound board for toddlers.  Each button plays a real audio
- * sample from Wikimedia Commons (CC-BY-SA) via a plain <audio> element.
+ * sample served from public/sounds/machines/ via a plain <audio> element.
  * Volume stays in sync with the master volume from AudioContext.
  */
 
@@ -17,62 +17,64 @@ interface Machine {
   url: string
 }
 
+const BASE = import.meta.env.BASE_URL
+
 const MACHINES: Machine[] = [
   {
-    id: 'train-horn',
+    id: 'train',
     emoji: '🚂',
     name: 'Train',
     color: '#E17055',
-    url: 'https://upload.wikimedia.org/wikipedia/commons/c/c2/Train_whistle.ogg',
+    url: `${BASE}sounds/machines/train.mp3`,
   },
   {
-    id: 'tractor',
-    emoji: '🚜',
-    name: 'Tractor',
+    id: 'truck',
+    emoji: '🚛',
+    name: 'Truck',
     color: '#FECA57',
-    url: 'https://upload.wikimedia.org/wikipedia/commons/1/10/Tractor_at_work.ogg',
+    url: `${BASE}sounds/machines/truck.mp3`,
   },
   {
     id: 'fire-truck',
     emoji: '🚒',
     name: 'Fire Truck',
     color: '#FF6B6B',
-    url: 'https://upload.wikimedia.org/wikipedia/commons/7/72/Firetruck_siren.ogg',
+    url: `${BASE}sounds/machines/firetruck.mp3`,
   },
   {
     id: 'airplane',
     emoji: '✈️',
     name: 'Airplane',
     color: '#54A0FF',
-    url: 'https://upload.wikimedia.org/wikipedia/commons/b/b5/Turbofan_takeoff.ogg',
+    url: `${BASE}sounds/machines/airplane.mp3`,
   },
   {
     id: 'helicopter',
     emoji: '🚁',
     name: 'Helicopter',
     color: '#48DBFB',
-    url: 'https://upload.wikimedia.org/wikipedia/commons/7/70/Helicopter_sound.ogg',
+    url: `${BASE}sounds/machines/helicopter.mp3`,
   },
   {
-    id: 'construction',
+    id: 'excavator',
     emoji: '🏗️',
     name: 'Digger',
     color: '#FF9F43',
-    url: 'https://upload.wikimedia.org/wikipedia/commons/e/e3/Excavator_digging.ogg',
+    url: `${BASE}sounds/machines/excavator.mp3`,
   },
   {
     id: 'boat',
     emoji: '⛴️',
-    name: 'Boat Horn',
+    name: 'Boat',
     color: '#A29BFE',
-    url: 'https://upload.wikimedia.org/wikipedia/commons/9/9a/Ship_horn.ogg',
+    url: `${BASE}sounds/machines/boat.mp3`,
   },
   {
     id: 'motorcycle',
     emoji: '🏍️',
     name: 'Motorbike',
     color: '#00D2D3',
-    url: 'https://upload.wikimedia.org/wikipedia/commons/6/65/Motorcycle_revving.ogg',
+    url: `${BASE}sounds/machines/motorcycle.mp3`,
   },
 ]
 
