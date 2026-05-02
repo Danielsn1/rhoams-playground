@@ -22,14 +22,14 @@ interface Animal {
 const BASE = import.meta.env.BASE_URL
 
 const ANIMALS: Animal[] = [
-  { id: 'cat',     emoji: '🐱', name: 'Cat',     color: '#FF9FF3', url: `${BASE}sounds/animals/cat.wav` },
-  { id: 'dog',     emoji: '🐶', name: 'Dog',     color: '#FECA57', url: `${BASE}sounds/animals/dog.wav` },
-  { id: 'cow',     emoji: '🐮', name: 'Cow',     color: '#A29BFE', url: `${BASE}sounds/animals/cow.ogg` },
-  { id: 'frog',    emoji: '🐸', name: 'Frog',    color: '#48DBFB', url: `${BASE}sounds/animals/frog.wav` },
-  { id: 'horse',   emoji: '🐴', name: 'Horse',   color: '#FF9F43', url: `${BASE}sounds/animals/horse.mp3` },
-  { id: 'sheep',   emoji: '🐑', name: 'Sheep',   color: '#DFE6E9', url: `${BASE}sounds/animals/sheep.ogg` },
-  { id: 'pig',     emoji: '🐷', name: 'Pig',     color: '#FD79A8', url: `${BASE}sounds/animals/pig.mp3` },
-  { id: 'rooster', emoji: '🐓', name: 'Rooster', color: '#E17055', url: `${BASE}sounds/animals/rooster.mp3` },
+  { id: 'cat',      emoji: '🐱', name: 'Cat',      color: '#FF9FF3', url: `${BASE}sounds/animals/cat.mp3` },
+  { id: 'dog',      emoji: '🐶', name: 'Dog',      color: '#FECA57', url: `${BASE}sounds/animals/dog.mp3` },
+  { id: 'cow',      emoji: '🐮', name: 'Cow',      color: '#A29BFE', url: `${BASE}sounds/animals/cow.ogg` },
+  { id: 'frog',     emoji: '🐸', name: 'Frog',     color: '#48DBFB', url: `${BASE}sounds/animals/frog.wav` },
+  { id: 'horse',    emoji: '🐴', name: 'Horse',    color: '#FF9F43', url: `${BASE}sounds/animals/horse.mp3` },
+  { id: 'sheep',    emoji: '🐑', name: 'Sheep',    color: '#DFE6E9', url: `${BASE}sounds/animals/sheep.mp3` },
+  { id: 'pig',      emoji: '🐷', name: 'Pig',      color: '#FD79A8', url: `${BASE}sounds/animals/pig.mp3` },
+  { id: 'rooster',  emoji: '🐓', name: 'Rooster',  color: '#E17055', url: `${BASE}sounds/animals/rooster.mp3` },
 ]
 
 // Synthesised fallback sounds — used when a file fails to load/play
