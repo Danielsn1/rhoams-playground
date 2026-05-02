@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react'
+import { getAudioContext } from '../audio'
 
 const COLORS = [
   { id: 'red', label: '🔴 Red', hex: '#FF6B6B' },
@@ -13,7 +14,7 @@ const COLORS = [
 
 function clickSound(freq = 440) {
   try {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)()
+    const ctx = getAudioContext()
     const osc = ctx.createOscillator()
     const gain = ctx.createGain()
     osc.connect(gain); gain.connect(ctx.destination)

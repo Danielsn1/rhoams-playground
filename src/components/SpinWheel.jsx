@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react'
+import { getAudioContext } from '../audio'
 
 const SEGMENTS = [
   '#FF6B6B', '#FF9F43', '#FECA57', '#54A0FF',
@@ -7,7 +8,7 @@ const SEGMENTS = [
 
 function spinSound() {
   try {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)()
+    const ctx = getAudioContext()
     const osc = ctx.createOscillator()
     const gain = ctx.createGain()
     osc.connect(gain); gain.connect(ctx.destination)
