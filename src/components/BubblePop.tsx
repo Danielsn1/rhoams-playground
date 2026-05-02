@@ -1,5 +1,14 @@
 import { useState, useCallback, useEffect, useRef } from 'react'
-import { getAudioContext } from '../audio'
+import { useAudio } from '../AudioContext'
+
+interface Bubble {
+  id: number
+  x: number
+  y: number
+  size: number
+  color: string
+  popped: boolean
+}
 
 const COLORS = [
   '#FF6B6B', '#FF9F43', '#FECA57', '#48DBFB',
@@ -7,9 +16,11 @@ const COLORS = [
   '#A29BFE', '#FD79A8', '#6AB04C', '#E17055',
 ]
 
-function createBubble(id) {
+let nextId = 0
+
+function createBubble(): Bubble {
   return {
-    id,
+    id: nextId++,
     x: Math.random() * 90 + 5,
     y: Math.random() * 80 + 5,
     size: Math.random() * 40 + 40,
@@ -18,55 +29,53 @@ function createBubble(id) {
   }
 }
 
-function popSound() {
-  try {
-    const ctx = getAudioContext()
-    const osc = ctx.createOscillator()
-    const gain = ctx.createGain()
-    osc.connect(gain); gain.connect(ctx.destination)
-    osc.type = 'sine'
-    osc.frequency.setValueAtTime(600, ctx.currentTime)
-    osc.frequency.exponentialRampToValueAtTime(200, ctx.currentTime + 0.08)
-    gain.gain.setValueAtTime(0.4, ctx.currentTime)
-    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.12)
-    osc.start(ctx.currentTime)
-    osc.stop(ctx.currentTime + 0.12)
-  } catch { /* ignore */ }
-}
-
-let nextId = 0
-
 export default function BubblePop() {
-  const [bubbles, setBubbles] = useState(() =>
-    Array.from({ length: 10 }, () => createBubble(nextId++))
+  const { getCtx, getMasterGain } = useAudio()
+  const [bubbles, setBubbles] = useState<Bubble[]>(() =>
+    Array.from({ length: 10 }, createBubble)
   )
-  const timerRef = useRef(null)
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
-  const popBubble = useCallback((id) => {
+  const popSound = useCallback((): void => {
+    try {
+      const ctx = getCtx()
+      const osc = ctx.createOscillator()
+      const gain = ctx.createGain()
+      osc.connect(gain)
+      gain.connect(getMasterGain())
+      osc.type = 'sine'
+      osc.frequency.setValueAtTime(600, ctx.currentTime)
+      osc.frequency.exponentialRampToValueAtTime(200, ctx.currentTime + 0.08)
+      gain.gain.setValueAtTime(0.4, ctx.currentTime)
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.12)
+      osc.start(ctx.currentTime)
+      osc.stop(ctx.currentTime + 0.12)
+    } catch { /* ignore */ }
+  }, [getCtx, getMasterGain])
+
+  const popBubble = useCallback((id: number): void => {
     popSound()
     setBubbles((prev) =>
       prev.map((b) => (b.id === id ? { ...b, popped: true } : b))
     )
-    // Remove popped bubble and maybe add a new one after animation
     setTimeout(() => {
       setBubbles((prev) => {
         const filtered = prev.filter((b) => b.id !== id)
-        return [...filtered, createBubble(nextId++)]
+        return [...filtered, createBubble()]
       })
     }, 400)
-  }, [])
+  }, [popSound])
 
-  // Keep refilling to at least 10 bubbles
   useEffect(() => {
     timerRef.current = setInterval(() => {
       setBubbles((prev) => {
-        if (prev.length < 10) {
-          return [...prev, createBubble(nextId++)]
-        }
+        if (prev.length < 10) return [...prev, createBubble()]
         return prev
       })
     }, 1000)
-    return () => clearInterval(timerRef.current)
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current)
+    }
   }, [])
 
   return (

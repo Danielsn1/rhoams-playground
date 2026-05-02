@@ -1,60 +1,60 @@
 import { useState, useCallback } from 'react'
-import { getAudioContext } from '../audio'
+import { useAudio } from '../AudioContext'
 
 const SEGMENTS = [
   '#FF6B6B', '#FF9F43', '#FECA57', '#54A0FF',
   '#FF9FF3', '#48DBFB', '#5F27CD', '#00D2D3',
 ]
 
-function spinSound() {
-  try {
-    const ctx = getAudioContext()
-    const osc = ctx.createOscillator()
-    const gain = ctx.createGain()
-    osc.connect(gain); gain.connect(ctx.destination)
-    osc.type = 'sine'
-    osc.frequency.setValueAtTime(300, ctx.currentTime)
-    osc.frequency.exponentialRampToValueAtTime(600, ctx.currentTime + 0.3)
-    osc.frequency.exponentialRampToValueAtTime(300, ctx.currentTime + 0.6)
-    gain.gain.setValueAtTime(0.3, ctx.currentTime)
-    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.6)
-    osc.start(ctx.currentTime)
-    osc.stop(ctx.currentTime + 0.6)
-  } catch { /* ignore */ }
+const R = 110
+const CX = 120
+const CY = 120
+
+function polarToCartesian(angleDeg: number, radius: number): { x: number; y: number } {
+  const rad = ((angleDeg - 90) * Math.PI) / 180
+  return { x: CX + radius * Math.cos(rad), y: CY + radius * Math.sin(rad) }
+}
+
+function segmentPath(startAngle: number, endAngle: number): string {
+  const s = polarToCartesian(startAngle, R)
+  const e = polarToCartesian(endAngle, R)
+  const large = endAngle - startAngle > 180 ? 1 : 0
+  return `M ${CX} ${CY} L ${s.x} ${s.y} A ${R} ${R} 0 ${large} 1 ${e.x} ${e.y} Z`
 }
 
 export default function SpinWheel() {
+  const { getCtx, getMasterGain } = useAudio()
   const [rotation, setRotation] = useState(0)
   const [spinning, setSpinning] = useState(false)
 
-  const spin = useCallback(() => {
+  const spinSound = useCallback((): void => {
+    try {
+      const ctx = getCtx()
+      const osc = ctx.createOscillator()
+      const gain = ctx.createGain()
+      osc.connect(gain)
+      gain.connect(getMasterGain())
+      osc.type = 'sine'
+      osc.frequency.setValueAtTime(300, ctx.currentTime)
+      osc.frequency.exponentialRampToValueAtTime(600, ctx.currentTime + 0.3)
+      osc.frequency.exponentialRampToValueAtTime(300, ctx.currentTime + 0.6)
+      gain.gain.setValueAtTime(0.3, ctx.currentTime)
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.6)
+      osc.start(ctx.currentTime)
+      osc.stop(ctx.currentTime + 0.6)
+    } catch { /* ignore */ }
+  }, [getCtx, getMasterGain])
+
+  const spin = useCallback((): void => {
     if (spinning) return
     spinSound()
     const extraSpin = 720 + Math.random() * 720
     setRotation((prev) => prev + extraSpin)
     setSpinning(true)
     setTimeout(() => setSpinning(false), 2000)
-  }, [spinning])
+  }, [spinning, spinSound])
 
   const segmentAngle = 360 / SEGMENTS.length
-  const r = 110
-  const cx = 120
-  const cy = 120
-
-  function polarToCartesian(angleDeg, radius) {
-    const rad = ((angleDeg - 90) * Math.PI) / 180
-    return {
-      x: cx + radius * Math.cos(rad),
-      y: cy + radius * Math.sin(rad),
-    }
-  }
-
-  function segmentPath(startAngle, endAngle) {
-    const s = polarToCartesian(startAngle, r)
-    const e = polarToCartesian(endAngle, r)
-    const large = endAngle - startAngle > 180 ? 1 : 0
-    return `M ${cx} ${cy} L ${s.x} ${s.y} A ${r} ${r} 0 ${large} 1 ${e.x} ${e.y} Z`
-  }
 
   return (
     <div className="activity-card wheel-card">
@@ -84,8 +84,8 @@ export default function SpinWheel() {
               strokeWidth="2"
             />
           ))}
-          <circle cx={cx} cy={cy} r="18" fill="white" stroke="#ccc" strokeWidth="2" />
-          <text x={cx} y={cy + 6} textAnchor="middle" fontSize="16">🎯</text>
+          <circle cx={CX} cy={CY} r="18" fill="white" stroke="#ccc" strokeWidth="2" />
+          <text x={CX} y={CY + 6} textAnchor="middle" fontSize="16">🎯</text>
         </svg>
         <div className="wheel-pointer">▼</div>
       </div>

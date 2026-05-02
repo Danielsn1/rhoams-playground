@@ -22,8 +22,60 @@
 .app-subtitle {
   font-size: clamp(1rem, 3vw, 1.5rem);
   color: rgba(255,255,255,0.9);
-  margin: 0;
+  margin: 0 0 12px;
   font-weight: 500;
+}
+
+/* ===== VOLUME SLIDER ===== */
+.volume-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 8px;
+}
+
+.volume-icon {
+  font-size: 1.4rem;
+  min-width: 1.8rem;
+  text-align: center;
+}
+
+.volume-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: clamp(140px, 30vw, 280px);
+  height: 8px;
+  border-radius: 4px;
+  background: rgba(255,255,255,0.3);
+  outline: none;
+  cursor: pointer;
+}
+
+.volume-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: white;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+
+.volume-slider::-webkit-slider-thumb:active {
+  transform: scale(1.25);
+}
+
+.volume-slider::-moz-range-thumb {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: white;
+  border: none;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+  cursor: pointer;
 }
 
 .board-grid {
@@ -483,4 +535,67 @@
   .color-btn {
     font-size: 0.65rem;
   }
+}
+
+/* ===== ANIMAL SOUNDS & MACHINE SOUNDS ===== */
+.animal-card,
+.machine-card {
+  position: relative;
+}
+
+.animal-speech {
+  text-align: center;
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #6c5ce7;
+  margin-bottom: 10px;
+  min-height: 1.4em;
+  animation: speech-pop 0.2s ease-out;
+}
+
+@keyframes speech-pop {
+  0% { transform: scale(0.7); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.animal-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.animal-btn {
+  border: none;
+  border-radius: 16px;
+  padding: 12px 6px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  transition: transform 0.1s, box-shadow 0.1s;
+  box-shadow: 0 5px 0 rgba(0,0,0,0.15);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.animal-btn:active,
+.animal-btn--active {
+  transform: scale(0.9) translateY(4px);
+  box-shadow: 0 1px 0 rgba(0,0,0,0.15);
+}
+
+.animal-btn--failed {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.animal-emoji {
+  font-size: 1.8rem;
+  line-height: 1;
+}
+
+.animal-name {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: rgba(0,0,0,0.6);
 }

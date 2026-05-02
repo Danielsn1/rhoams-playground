@@ -1,22 +1,13 @@
 import { useState, useCallback, useRef, useEffect } from 'react'
-import { getAudioContext } from '../audio'
+import { useAudio } from '../AudioContext'
 
-function celebrationSound() {
-  try {
-    const ctx = getAudioContext()
-    const notes = [523, 659, 784, 1047, 1319]
-    notes.forEach((freq, i) => {
-      const osc = ctx.createOscillator()
-      const gain = ctx.createGain()
-      osc.connect(gain); gain.connect(ctx.destination)
-      osc.type = 'sine'
-      osc.frequency.value = freq
-      gain.gain.setValueAtTime(0.3, ctx.currentTime + i * 0.12)
-      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i * 0.12 + 0.4)
-      osc.start(ctx.currentTime + i * 0.12)
-      osc.stop(ctx.currentTime + i * 0.12 + 0.4)
-    })
-  } catch { /* ignore */ }
+interface ConfettiPiece {
+  id: number
+  x: number
+  color: string
+  size: number
+  delay: number
+  shape: 'circle' | 'square'
 }
 
 const CONFETTI_COLORS = [
@@ -24,9 +15,11 @@ const CONFETTI_COLORS = [
   '#FF9FF3', '#54A0FF', '#5F27CD', '#00D2D3',
 ]
 
-function randomConfetti(id) {
+let confettiId = 0
+
+function randomConfetti(): ConfettiPiece {
   return {
-    id,
+    id: confettiId++,
     x: Math.random() * 100,
     color: CONFETTI_COLORS[Math.floor(Math.random() * CONFETTI_COLORS.length)],
     size: Math.random() * 10 + 6,
@@ -35,25 +28,45 @@ function randomConfetti(id) {
   }
 }
 
-let confettiId = 0
-
 export default function Celebration() {
+  const { getCtx, getMasterGain } = useAudio()
   const [celebrating, setCelebrating] = useState(false)
-  const [confetti, setConfetti] = useState([])
-  const timerRef = useRef(null)
+  const [confetti, setConfetti] = useState<ConfettiPiece[]>([])
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
-  const celebrate = useCallback(() => {
+  const celebrationSound = useCallback((): void => {
+    try {
+      const ctx = getCtx()
+      const notes = [523, 659, 784, 1047, 1319]
+      notes.forEach((freq, i) => {
+        const osc = ctx.createOscillator()
+        const gain = ctx.createGain()
+        osc.connect(gain)
+        gain.connect(getMasterGain())
+        osc.type = 'sine'
+        osc.frequency.value = freq
+        gain.gain.setValueAtTime(0.3, ctx.currentTime + i * 0.12)
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i * 0.12 + 0.4)
+        osc.start(ctx.currentTime + i * 0.12)
+        osc.stop(ctx.currentTime + i * 0.12 + 0.4)
+      })
+    } catch { /* ignore */ }
+  }, [getCtx, getMasterGain])
+
+  const celebrate = useCallback((): void => {
     if (celebrating) return
     celebrationSound()
     setCelebrating(true)
-    setConfetti(Array.from({ length: 40 }, () => randomConfetti(confettiId++)))
+    setConfetti(Array.from({ length: 40 }, randomConfetti))
     timerRef.current = setTimeout(() => {
       setCelebrating(false)
       setConfetti([])
     }, 3000)
-  }, [celebrating])
+  }, [celebrating, celebrationSound])
 
-  useEffect(() => () => clearTimeout(timerRef.current), [])
+  useEffect(() => () => {
+    if (timerRef.current) clearTimeout(timerRef.current)
+  }, [])
 
   return (
     <div className="activity-card celebration-card">
