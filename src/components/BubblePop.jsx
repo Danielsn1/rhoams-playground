@@ -1,4 +1,5 @@
 import { useState, useCallback, useEffect, useRef } from 'react'
+import { getAudioContext } from '../audio'
 
 const COLORS = [
   '#FF6B6B', '#FF9F43', '#FECA57', '#48DBFB',
@@ -19,7 +20,7 @@ function createBubble(id) {
 
 function popSound() {
   try {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)()
+    const ctx = getAudioContext()
     const osc = ctx.createOscillator()
     const gain = ctx.createGain()
     osc.connect(gain); gain.connect(ctx.destination)

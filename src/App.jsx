@@ -1,5 +1,5 @@
 import Piano from './components/Piano'
-import AnimalSounds from './components/AnimalSounds'
+import DrumMachine from './components/DrumMachine'
 import BubblePop from './components/BubblePop'
 import ShapeButtons from './components/ShapeButtons'
 import ColorButtons from './components/ColorButtons'
@@ -17,7 +17,7 @@ export default function App() {
       </header>
       <main className="board-grid">
         <Piano />
-        <AnimalSounds />
+        <DrumMachine />
         <BubblePop />
         <LightSwitches />
         <ShapeButtons />

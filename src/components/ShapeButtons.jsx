@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react'
+import { getAudioContext } from '../audio'
 
 const SHAPES = [
   { id: 'circle', emoji: '⭕', color: '#FF6B6B', name: 'Circle' },
@@ -11,7 +12,7 @@ const SHAPES = [
 
 function shimmerSound() {
   try {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)()
+    const ctx = getAudioContext()
     const now = ctx.currentTime
     ;[523, 659, 784, 1047].forEach((freq, i) => {
       const osc = ctx.createOscillator()

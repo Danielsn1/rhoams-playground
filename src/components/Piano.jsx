@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react'
+import { getAudioContext } from '../audio'
 
 const KEYS = [
   { note: 'C4', freq: 261.63, color: '#FF6B6B', label: 'Do' },
@@ -13,7 +14,7 @@ const KEYS = [
 
 function playNote(freq) {
   try {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)()
+    const ctx = getAudioContext()
     const osc = ctx.createOscillator()
     const gain = ctx.createGain()
     osc.connect(gain)

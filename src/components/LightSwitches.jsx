@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react'
+import { getAudioContext } from '../audio'
 
 const SWITCHES = [
   { id: 'sun', off: '🌑', on: '☀️', label: 'Sun', onColor: '#FECA57', offColor: '#636e72' },
@@ -9,7 +10,7 @@ const SWITCHES = [
 
 function toggleSound(on) {
   try {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)()
+    const ctx = getAudioContext()
     const osc = ctx.createOscillator()
     const gain = ctx.createGain()
     osc.connect(gain); gain.connect(ctx.destination)

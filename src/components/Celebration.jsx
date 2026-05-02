@@ -1,8 +1,9 @@
 import { useState, useCallback, useRef, useEffect } from 'react'
+import { getAudioContext } from '../audio'
 
 function celebrationSound() {
   try {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)()
+    const ctx = getAudioContext()
     const notes = [523, 659, 784, 1047, 1319]
     notes.forEach((freq, i) => {
       const osc = ctx.createOscillator()
