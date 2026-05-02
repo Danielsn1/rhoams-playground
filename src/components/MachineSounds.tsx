@@ -10,6 +10,9 @@
 import { useState, useCallback, useEffect, useRef } from 'react'
 import { useAudio } from '../AudioContext'
 
+// Stop playback automatically after this many seconds
+const MAX_PLAY_SECONDS = 4
+
 interface Machine {
   id: string
   emoji: string
@@ -104,6 +107,7 @@ function synthMachine(id: string, ctx: AudioContext, out: GainNode): void {
 export default function MachineSounds() {
   const { volume, getCtx, getMasterGain } = useAudio()
   const audioRefs = useRef<Record<string, HTMLAudioElement>>({})
+  const clipTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const [active, setActive] = useState<string | null>(null)
   const [label, setLabel] = useState<string | null>(null)
 
@@ -130,6 +134,10 @@ export default function MachineSounds() {
     const el = audioRefs.current[machine.id]
     if (!el) return
 
+    // Stop any currently playing audio and clear the clip timer
+    if (clipTimerRef.current !== null) clearTimeout(clipTimerRef.current)
+    Object.values(audioRefs.current).forEach((a) => { a.pause(); a.currentTime = 0 })
+
     // Set src on first use (lazy loading avoids premature error events)
     if (!el.getAttribute('src')) el.src = machine.url
 
@@ -137,6 +145,9 @@ export default function MachineSounds() {
     void el.play().catch(() => {
       try { synthMachine(machine.id, getCtx(), getMasterGain()) } catch { /* ignore */ }
     })
+
+    // Clamp playback to MAX_PLAY_SECONDS
+    clipTimerRef.current = setTimeout(() => { el.pause(); el.currentTime = 0 }, MAX_PLAY_SECONDS * 1000)
 
     setActive(machine.id)
     setLabel(`${machine.emoji} ${machine.name}!`)
