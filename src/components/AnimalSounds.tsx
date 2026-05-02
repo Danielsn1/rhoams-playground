@@ -1,10 +1,9 @@
 /**
  * AnimalSounds.tsx
  *
- * Eight animal buttons, each backed by a real audio sample fetched from
- * Wikimedia Commons (CC-BY-SA).  Plain <audio> elements are used so the
- * browser can load cross-origin media without CORS restrictions.
- * Volume is kept in sync with the master volume from AudioContext.
+ * Eight animal buttons, each backed by a real audio sample served from
+ * public/sounds/animals/.  Plain <audio> elements are used so volume
+ * is kept in sync with the master volume from AudioContext.
  */
 
 import { useState, useCallback, useEffect, useRef } from 'react'
@@ -15,9 +14,10 @@ interface Animal {
   emoji: string
   name: string
   color: string
-  /** Wikimedia Commons direct-download URL (OGG / MP3). */
   url: string
 }
+
+const BASE = import.meta.env.BASE_URL
 
 const ANIMALS: Animal[] = [
   {
@@ -25,56 +25,56 @@ const ANIMALS: Animal[] = [
     emoji: '🐱',
     name: 'Cat',
     color: '#FF9FF3',
-    url: 'https://upload.wikimedia.org/wikipedia/commons/2/2c/Felis_catus-cat_meow.ogg',
+    url: `${BASE}sounds/animals/cat.wav`,
   },
   {
     id: 'dog',
     emoji: '🐶',
     name: 'Dog',
     color: '#FECA57',
-    url: 'https://upload.wikimedia.org/wikipedia/commons/d/d5/Barking_Jack_Russell.ogg',
+    url: `${BASE}sounds/animals/dog.wav`,
   },
   {
     id: 'cow',
     emoji: '🐮',
     name: 'Cow',
     color: '#A29BFE',
-    url: 'https://upload.wikimedia.org/wikipedia/commons/5/52/Bos_taurus.ogg',
+    url: `${BASE}sounds/animals/cow.ogg`,
   },
   {
-    id: 'duck',
-    emoji: '🦆',
-    name: 'Duck',
+    id: 'frog',
+    emoji: '🐸',
+    name: 'Frog',
     color: '#48DBFB',
-    url: 'https://upload.wikimedia.org/wikipedia/commons/a/ab/Anas_platyrhynchos_audio.ogg',
+    url: `${BASE}sounds/animals/frog.wav`,
   },
   {
     id: 'horse',
     emoji: '🐴',
     name: 'Horse',
     color: '#FF9F43',
-    url: 'https://upload.wikimedia.org/wikipedia/commons/d/d9/Salso-Equine-Whinny.ogg',
+    url: `${BASE}sounds/animals/horse.mp3`,
   },
   {
     id: 'sheep',
     emoji: '🐑',
     name: 'Sheep',
     color: '#DFE6E9',
-    url: 'https://upload.wikimedia.org/wikipedia/commons/6/6a/Ovis_orientalis_aries.ogg',
+    url: `${BASE}sounds/animals/sheep.ogg`,
   },
   {
     id: 'pig',
     emoji: '🐷',
     name: 'Pig',
     color: '#FD79A8',
-    url: 'https://upload.wikimedia.org/wikipedia/commons/b/b8/Piglet_oink.ogg',
+    url: `${BASE}sounds/animals/pig.mp3`,
   },
   {
-    id: 'elephant',
-    emoji: '🐘',
-    name: 'Elephant',
-    color: '#B2BEC3',
-    url: 'https://upload.wikimedia.org/wikipedia/commons/a/a3/Elephant_trumpet.ogg',
+    id: 'rooster',
+    emoji: '🐓',
+    name: 'Rooster',
+    color: '#E17055',
+    url: `${BASE}sounds/animals/rooster.mp3`,
   },
 ]
 
