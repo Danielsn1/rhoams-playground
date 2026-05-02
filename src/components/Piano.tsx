@@ -1,7 +1,14 @@
 import { useState, useCallback } from 'react'
-import { getAudioContext } from '../audio'
+import { useAudio } from '../AudioContext'
 
-const KEYS = [
+interface PianoKey {
+  note: string
+  freq: number
+  color: string
+  label: string
+}
+
+const KEYS: PianoKey[] = [
   { note: 'C4', freq: 261.63, color: '#FF6B6B', label: 'Do' },
   { note: 'D4', freq: 293.66, color: '#FF9F43', label: 'Re' },
   { note: 'E4', freq: 329.63, color: '#FECA57', label: 'Mi' },
@@ -12,32 +19,33 @@ const KEYS = [
   { note: 'C5', freq: 523.25, color: '#FF6B6B', label: 'Do' },
 ]
 
-function playNote(freq) {
-  try {
-    const ctx = getAudioContext()
-    const osc = ctx.createOscillator()
-    const gain = ctx.createGain()
-    osc.connect(gain)
-    gain.connect(ctx.destination)
-    osc.type = 'sine'
-    osc.frequency.setValueAtTime(freq, ctx.currentTime)
-    gain.gain.setValueAtTime(0.6, ctx.currentTime)
-    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 1.2)
-    osc.start(ctx.currentTime)
-    osc.stop(ctx.currentTime + 1.2)
-  } catch {
-    // Audio not supported
-  }
-}
-
 export default function Piano() {
-  const [active, setActive] = useState(null)
+  const { getCtx, getMasterGain } = useAudio()
+  const [active, setActive] = useState<string | null>(null)
 
-  const handlePress = useCallback((key) => {
+  const playNote = useCallback((freq: number): void => {
+    try {
+      const ctx = getCtx()
+      const osc = ctx.createOscillator()
+      const gain = ctx.createGain()
+      osc.connect(gain)
+      gain.connect(getMasterGain())
+      osc.type = 'sine'
+      osc.frequency.setValueAtTime(freq, ctx.currentTime)
+      gain.gain.setValueAtTime(0.6, ctx.currentTime)
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 1.2)
+      osc.start(ctx.currentTime)
+      osc.stop(ctx.currentTime + 1.2)
+    } catch {
+      // Audio not supported
+    }
+  }, [getCtx, getMasterGain])
+
+  const handlePress = useCallback((key: PianoKey): void => {
     playNote(key.freq)
     setActive(key.note)
     setTimeout(() => setActive(null), 300)
-  }, [])
+  }, [playNote])
 
   return (
     <div className="activity-card piano-card">

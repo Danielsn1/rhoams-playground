@@ -1,40 +1,51 @@
 import { useState, useCallback } from 'react'
-import { getAudioContext } from '../audio'
+import { useAudio } from '../AudioContext'
 
-const SWITCHES = [
-  { id: 'sun', off: '🌑', on: '☀️', label: 'Sun', onColor: '#FECA57', offColor: '#636e72' },
-  { id: 'light', off: '💡', on: '💡', label: 'Light', onColor: '#FECA57', offColor: '#b2bec3' },
-  { id: 'star', off: '✨', on: '⭐', label: 'Stars', onColor: '#f9ca24', offColor: '#636e72' },
+interface Switch {
+  id: string
+  off: string
+  on: string
+  label: string
+  onColor: string
+  offColor: string
+}
+
+const SWITCHES: Switch[] = [
+  { id: 'sun',    off: '🌑', on: '☀️', label: 'Sun',    onColor: '#FECA57', offColor: '#636e72' },
+  { id: 'light',  off: '💡', on: '💡', label: 'Light',  onColor: '#FECA57', offColor: '#b2bec3' },
+  { id: 'star',   off: '✨', on: '⭐', label: 'Stars',  onColor: '#f9ca24', offColor: '#636e72' },
   { id: 'flower', off: '🌱', on: '🌸', label: 'Flower', onColor: '#FD79A8', offColor: '#55EFC4' },
 ]
 
-function toggleSound(on) {
-  try {
-    const ctx = getAudioContext()
-    const osc = ctx.createOscillator()
-    const gain = ctx.createGain()
-    osc.connect(gain); gain.connect(ctx.destination)
-    osc.type = 'square'
-    osc.frequency.value = on ? 880 : 440
-    gain.gain.setValueAtTime(0.2, ctx.currentTime)
-    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.15)
-    osc.start(ctx.currentTime)
-    osc.stop(ctx.currentTime + 0.15)
-  } catch { /* ignore */ }
-}
-
 export default function LightSwitches() {
-  const [states, setStates] = useState(() =>
+  const { getCtx, getMasterGain } = useAudio()
+  const [states, setStates] = useState<Record<string, boolean>>(() =>
     Object.fromEntries(SWITCHES.map((s) => [s.id, false]))
   )
 
-  const toggle = useCallback((id) => {
+  const toggleSound = useCallback((on: boolean): void => {
+    try {
+      const ctx = getCtx()
+      const osc = ctx.createOscillator()
+      const gain = ctx.createGain()
+      osc.connect(gain)
+      gain.connect(getMasterGain())
+      osc.type = 'square'
+      osc.frequency.value = on ? 880 : 440
+      gain.gain.setValueAtTime(0.2, ctx.currentTime)
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.15)
+      osc.start(ctx.currentTime)
+      osc.stop(ctx.currentTime + 0.15)
+    } catch { /* ignore */ }
+  }, [getCtx, getMasterGain])
+
+  const toggle = useCallback((id: string): void => {
     setStates((prev) => {
       const next = !prev[id]
       toggleSound(next)
       return { ...prev, [id]: next }
     })
-  }, [])
+  }, [toggleSound])
 
   return (
     <div className="activity-card switch-card">
