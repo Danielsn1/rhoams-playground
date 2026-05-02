@@ -71,7 +71,6 @@ export default function SpinWheel() {
             cursor: spinning ? 'default' : 'pointer',
           }}
           onClick={spin}
-          onTouchStart={spin}
           aria-label="Spin wheel"
           role="button"
         >
