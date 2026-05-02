@@ -13,7 +13,7 @@ A colorful, interactive digital busy board for toddlers (ages 1–3), built with
 | 🎹 **Piano** | 8 chromatic keys (C4–C5) with sine-wave tones |
 | 🥁 **Drum Kit** | 8 pads — kick, snare, hi-hat, open hat, clap, hi tom, lo tom, cymbal — with synthesized percussion |
 | 🐾 **Animal Sounds** | 8 real animal sound samples — cat, dog, cow, frog, horse, sheep, pig, rooster |
-| 🏗️ **Big Machines** | 8 real vehicle sound samples — train, truck, fire truck, airplane, helicopter, digger, boat, motorbike |
+| 🏗️ **Big Machines** | 8 synthesised vehicle sounds — train whistle, truck air horn, fire siren, jet engine, helicopter rotor, diesel excavator, foghorn, motorbike rev |
 | 🫧 **Pop the Bubbles** | Floating bubbles, pop animation + sound on tap |
 | 💡 **Light Switches** | 4 toggles with glow effects |
 | ✨ **Magic Shapes** | 6 shape buttons with sparkle particle burst + chime |
@@ -29,7 +29,10 @@ A colorful, interactive digital busy board for toddlers (ages 1–3), built with
 Piano, drum kit, bubbles, shapes, colours, and celebration all use the **Web Audio API** — no files to download, works fully offline. A shared `AudioProvider` (React Context) owns a single `AudioContext` instance and a master `GainNode` so every component shares one context and the global volume slider works across all synthesized sounds.
 
 ### Sample-based sounds
-Animal Sounds and Big Machines play real audio files from `public/sounds/` via plain `<audio>` elements. Their volumes are kept in sync with the master volume slider.
+Animal Sounds plays real audio files from `public/sounds/animals/` via plain `<audio>` elements. The `src` is set **lazily on first click** — never on mount — so no error events fire prematurely and buttons are never disabled before the user interacts. If a file fails to load (e.g. OGG format on Safari/iOS), a synthesised fallback sound plays automatically.
+
+### Synthesised machine sounds
+Big Machines uses the Web Audio API to synthesise each sound (steam whistle, air horn, siren, jet engine, helicopter rotor chop, diesel rumble, foghorn, engine rev). No files are downloaded, the sounds are always correct and work offline.
 
 ### Volume slider
 A global 🔊 volume slider in the app header controls all sounds simultaneously — both the Web Audio gain and the HTML `<audio>` element volumes.
