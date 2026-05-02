@@ -237,7 +237,6 @@ export default function DrumMachine() {
             className={`drum-btn ${active === drum.id ? 'drum-btn--active' : ''}`}
             style={{ background: drum.color }}
             onClick={() => handleDrum(drum)}
-            onTouchStart={() => handleDrum(drum)}
             aria-label={`${drum.label} drum`}
           >
             <drum.Icon />

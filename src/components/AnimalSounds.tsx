@@ -275,7 +275,6 @@ export default function AnimalSounds() {
             className={`animal-btn${active === animal.id ? ' animal-btn--active' : ''}`}
             style={{ background: animal.color }}
             onClick={() => handleAnimal(animal)}
-            onTouchStart={() => handleAnimal(animal)}
             aria-label={`${animal.name} sound`}
           >
             <span className="animal-emoji">{animal.emoji}</span>

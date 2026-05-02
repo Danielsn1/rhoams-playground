@@ -64,7 +64,6 @@ export default function LightSwitches() {
               <button
                 className={`toggle-switch ${isOn ? 'toggle-switch--on' : ''}`}
                 onClick={() => toggle(sw.id)}
-                onTouchStart={() => toggle(sw.id)}
                 aria-label={`Toggle ${sw.label}`}
                 style={isOn ? { background: sw.onColor } : {}}
               >

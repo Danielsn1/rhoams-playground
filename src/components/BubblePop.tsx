@@ -95,7 +95,6 @@ export default function BubblePop() {
               border: `3px solid ${bubble.color}`,
             }}
             onClick={() => !bubble.popped && popBubble(bubble.id)}
-            onTouchStart={() => !bubble.popped && popBubble(bubble.id)}
             aria-label="Pop bubble"
           />
         ))}

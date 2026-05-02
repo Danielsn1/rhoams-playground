@@ -57,7 +57,6 @@ export default function Piano() {
             className={`piano-key ${active === key.note ? 'piano-key--active' : ''}`}
             style={{ background: key.color }}
             onClick={() => handlePress(key)}
-            onTouchStart={() => handlePress(key)}
             aria-label={`Play note ${key.label}`}
           >
             {key.label}
