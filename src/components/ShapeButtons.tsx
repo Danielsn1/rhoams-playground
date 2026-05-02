@@ -70,7 +70,6 @@ export default function ShapeButtons() {
               className={`shape-btn ${active === shape.id ? 'shape-btn--active' : ''}`}
               style={{ background: shape.color }}
               onClick={() => handleShape(shape)}
-              onTouchStart={() => handleShape(shape)}
               aria-label={`${shape.name} button`}
             >
               <span className="shape-emoji">{shape.emoji}</span>

@@ -89,7 +89,6 @@ export default function Celebration() {
         <button
           className={`celebrate-btn ${celebrating ? 'celebrate-btn--active' : ''}`}
           onClick={celebrate}
-          onTouchStart={celebrate}
           aria-label="Celebrate!"
         >
           {celebrating ? '🎊 Yay!' : '🎉 Party!'}

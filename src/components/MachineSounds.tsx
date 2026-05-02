@@ -166,7 +166,6 @@ export default function MachineSounds() {
             className={`animal-btn${active === machine.id ? ' animal-btn--active' : ''}`}
             style={{ background: machine.color }}
             onClick={() => handleMachine(machine)}
-            onTouchStart={() => handleMachine(machine)}
             aria-label={`${machine.name} sound`}
           >
             <span className="animal-emoji">{machine.emoji}</span>

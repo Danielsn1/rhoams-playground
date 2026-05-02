@@ -385,6 +385,7 @@
 .spin-wheel {
   display: block;
   filter: drop-shadow(0 8px 16px rgba(0,0,0,0.2));
+  touch-action: manipulation;
 }
 
 .wheel-pointer {

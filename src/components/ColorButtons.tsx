@@ -59,7 +59,6 @@ export default function ColorButtons() {
               boxShadow: activeColor === color.id ? `0 0 30px ${color.hex}` : undefined,
             }}
             onClick={() => handleColor(color, idx)}
-            onTouchStart={() => handleColor(color, idx)}
             aria-label={`${color.label} button`}
           >
             {color.label}
