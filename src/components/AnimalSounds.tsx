@@ -11,6 +11,9 @@
 import { useState, useCallback, useEffect, useRef } from 'react'
 import { useAudio } from '../AudioContext'
 
+// Stop playback automatically after this many seconds
+const MAX_PLAY_SECONDS = 3
+
 interface Animal {
   id: string
   emoji: string
@@ -209,6 +212,7 @@ function synthAnimal(id: string, ctx: AudioContext, out: GainNode): void {
 export default function AnimalSounds() {
   const { volume, getCtx, getMasterGain } = useAudio()
   const audioRefs = useRef<Record<string, HTMLAudioElement>>({})
+  const clipTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const [active, setActive] = useState<string | null>(null)
   const [speech, setSpeech] = useState<string | null>(null)
 
@@ -237,6 +241,10 @@ export default function AnimalSounds() {
     const el = audioRefs.current[animal.id]
     if (!el) return
 
+    // Stop any currently playing audio and clear the clip timer
+    if (clipTimerRef.current !== null) clearTimeout(clipTimerRef.current)
+    Object.values(audioRefs.current).forEach((a) => { a.pause(); a.currentTime = 0 })
+
     // Set src on first use (lazy loading avoids premature error events)
     if (!el.getAttribute('src')) el.src = animal.url
 
@@ -246,6 +254,9 @@ export default function AnimalSounds() {
       // play the synthesised fallback so the button always does something.
       try { synthAnimal(animal.id, getCtx(), getMasterGain()) } catch { /* ignore */ }
     })
+
+    // Clamp playback to MAX_PLAY_SECONDS
+    clipTimerRef.current = setTimeout(() => { el.pause(); el.currentTime = 0 }, MAX_PLAY_SECONDS * 1000)
 
     setActive(animal.id)
     setSpeech(`${animal.emoji} ${animal.name}!`)
