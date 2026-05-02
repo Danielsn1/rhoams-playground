@@ -77,20 +77,23 @@ const IconClap = () => (
   </svg>
 )
 
-const IconTom = ({ small }) => (
+const IconTom = ({ variant }) => {
+  const high = variant === 'high'
+  return (
   <svg viewBox="0 0 44 44" fill="none" className="drum-svg" aria-hidden="true">
     {/* body - hi tom is narrower/taller, lo tom is wider/shorter */}
-    <rect x={small ? 9 : 5} y={small ? 14 : 17} width={small ? 26 : 34} height={small ? 16 : 11} rx="2" fill="rgba(255,255,255,0.75)" />
+    <rect x={high ? 9 : 5} y={high ? 14 : 17} width={high ? 26 : 34} height={high ? 16 : 11} rx="2" fill="rgba(255,255,255,0.75)" />
     {/* top head */}
-    <ellipse cx="22" cy={small ? 14 : 17} rx={small ? 13 : 17} ry={small ? 4.5 : 4} fill="rgba(255,255,255,0.9)" />
+    <ellipse cx="22" cy={high ? 14 : 17} rx={high ? 13 : 17} ry={high ? 4.5 : 4} fill="rgba(255,255,255,0.9)" />
     {/* bottom head */}
-    <ellipse cx="22" cy={small ? 30 : 28} rx={small ? 13 : 17} ry={small ? 4.5 : 4} fill="rgba(255,255,255,0.6)" />
+    <ellipse cx="22" cy={high ? 30 : 28} rx={high ? 13 : 17} ry={high ? 4.5 : 4} fill="rgba(255,255,255,0.6)" />
     {/* rim highlight */}
-    <ellipse cx="22" cy={small ? 14 : 17} rx={small ? 13 : 17} ry={small ? 4.5 : 4} fill="none" stroke="rgba(255,255,255,0.6)" strokeWidth="1.5" />
-    {/* mounting arm */}
-    {small && <line x1="22" y1="5" x2="22" y2="14" stroke="rgba(255,255,255,0.7)" strokeWidth="2" strokeLinecap="round" />}
+    <ellipse cx="22" cy={high ? 14 : 17} rx={high ? 13 : 17} ry={high ? 4.5 : 4} fill="none" stroke="rgba(255,255,255,0.6)" strokeWidth="1.5" />
+    {/* mounting arm for hi tom */}
+    {high && <line x1="22" y1="5" x2="22" y2="14" stroke="rgba(255,255,255,0.7)" strokeWidth="2" strokeLinecap="round" />}
   </svg>
-)
+  )
+}
 
 const IconCymbal = () => (
   <svg viewBox="0 0 44 44" fill="none" className="drum-svg" aria-hidden="true">
@@ -201,15 +204,18 @@ function playCymbal() {
   playNoise(1.2, 6000, 0.5)
 }
 
+const IconHiTom = () => <IconTom variant="high" />
+const IconLoTom = () => <IconTom variant="low" />
+
 const DRUMS = [
-  { id: 'kick',    Icon: IconKick,          label: 'Kick',     color: '#FF6B6B', play: playKick },
-  { id: 'snare',   Icon: IconSnare,         label: 'Snare',    color: '#FF9F43', play: playSnare },
-  { id: 'hihat',   Icon: IconHiHat,         label: 'Hi-Hat',   color: '#FECA57', play: () => playHihat(false) },
-  { id: 'openhat', Icon: IconOpenHat,       label: 'Open Hat', color: '#48DBFB', play: () => playHihat(true) },
-  { id: 'clap',    Icon: IconClap,          label: 'Clap',     color: '#FF9FF3', play: playClap },
-  { id: 'tom1',    Icon: () => <IconTom small />, label: 'Hi Tom', color: '#54A0FF', play: () => playTom(200) },
-  { id: 'tom2',    Icon: () => <IconTom />, label: 'Lo Tom',   color: '#5F27CD', play: () => playTom(80) },
-  { id: 'cymbal',  Icon: IconCymbal,        label: 'Cymbal',   color: '#A29BFE', play: playCymbal },
+  { id: 'kick',    Icon: IconKick,    label: 'Kick',     color: '#FF6B6B', play: playKick },
+  { id: 'snare',   Icon: IconSnare,   label: 'Snare',    color: '#FF9F43', play: playSnare },
+  { id: 'hihat',   Icon: IconHiHat,   label: 'Hi-Hat',   color: '#FECA57', play: () => playHihat(false) },
+  { id: 'openhat', Icon: IconOpenHat, label: 'Open Hat', color: '#48DBFB', play: () => playHihat(true) },
+  { id: 'clap',    Icon: IconClap,    label: 'Clap',     color: '#FF9FF3', play: playClap },
+  { id: 'tom1',    Icon: IconHiTom,   label: 'Hi Tom',   color: '#54A0FF', play: () => playTom(200) },
+  { id: 'tom2',    Icon: IconLoTom,   label: 'Lo Tom',   color: '#5F27CD', play: () => playTom(80) },
+  { id: 'cymbal',  Icon: IconCymbal,  label: 'Cymbal',   color: '#A29BFE', play: playCymbal },
 ]
 
 export default function DrumMachine() {
