@@ -28,9 +28,9 @@ const MACHINES: Machine[] = [
     url: `${BASE}sounds/machines/train.mp3`,
   },
   {
-    id: 'tractor',
-    emoji: '🚜',
-    name: 'Tractor',
+    id: 'truck',
+    emoji: '🚛',
+    name: 'Truck',
     color: '#FECA57',
     url: `${BASE}sounds/machines/truck.mp3`,
   },

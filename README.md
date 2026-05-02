@@ -13,7 +13,7 @@ A colorful, interactive digital busy board for toddlers (ages 1–3), built with
 | 🎹 **Piano** | 8 chromatic keys (C4–C5) with sine-wave tones |
 | 🥁 **Drum Kit** | 8 pads — kick, snare, hi-hat, open hat, clap, hi tom, lo tom, cymbal — with synthesized percussion |
 | 🐾 **Animal Sounds** | 8 real animal sound samples — cat, dog, cow, frog, horse, sheep, pig, rooster |
-| 🏗️ **Big Machines** | 8 real vehicle sound samples — train, tractor, fire truck, airplane, helicopter, digger, boat, motorbike |
+| 🏗️ **Big Machines** | 8 real vehicle sound samples — train, truck, fire truck, airplane, helicopter, digger, boat, motorbike |
 | 🫧 **Pop the Bubbles** | Floating bubbles, pop animation + sound on tap |
 | 💡 **Light Switches** | 4 toggles with glow effects |
 | ✨ **Magic Shapes** | 6 shape buttons with sparkle particle burst + chime |
