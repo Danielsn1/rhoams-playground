@@ -129,9 +129,9 @@
   box-shadow: 0 1px 0 rgba(0,0,0,0.18);
 }
 
-.drum-emoji {
-  font-size: 2.2rem;
-  line-height: 1;
+.drum-svg {
+  width: 2.4rem;
+  height: 2.4rem;
 }
 
 .drum-label {
