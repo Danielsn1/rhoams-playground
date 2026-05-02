@@ -93,21 +93,6 @@ function playTom(freq = 120) {
   osc.start(now); osc.stop(now + 0.35)
 }
 
-function playCowbell() {
-  const ctx = getAudioContext()
-  const now = ctx.currentTime
-  ;[562, 845].forEach((freq) => {
-    const osc = ctx.createOscillator()
-    const gain = ctx.createGain()
-    osc.type = 'square'
-    osc.frequency.value = freq
-    gain.gain.setValueAtTime(0.25, now)
-    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.5)
-    osc.connect(gain); gain.connect(ctx.destination)
-    osc.start(now); osc.stop(now + 0.5)
-  })
-}
-
 function playCymbal() {
   playNoise(1.2, 6000, 0.5)
 }
@@ -119,8 +104,7 @@ const DRUMS = [
   { id: 'openhat', emoji: '🎪', label: 'Open Hat', color: '#48DBFB', play: () => playHihat(true) },
   { id: 'clap',    emoji: '👏', label: 'Clap',     color: '#FF9FF3', play: playClap },
   { id: 'tom1',    emoji: '🎸', label: 'Hi Tom',   color: '#54A0FF', play: () => playTom(200) },
-  { id: 'tom2',    emoji: '��', label: 'Lo Tom',   color: '#5F27CD', play: () => playTom(80) },
-  { id: 'cowbell', emoji: '🐄', label: 'Cowbell',  color: '#00D2D3', play: playCowbell },
+  { id: 'tom2',    emoji: '🪗', label: 'Lo Tom',   color: '#5F27CD', play: () => playTom(80) },
   { id: 'cymbal',  emoji: '✨', label: 'Cymbal',   color: '#A29BFE', play: playCymbal },
 ]
 
